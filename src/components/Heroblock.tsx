@@ -3,7 +3,7 @@ import React from 'react'
 function Heroblock() {
   return (
     <div>
-        <ul className=' justify-center hidden  sm:flex gap-9 text-gray-600'>
+        <ul className='justify-center hidden  sm:flex gap-9 text-gray-600'>
         <li>plant pots</li>
         <li>caramics</li>
         <li>Tables</li>

@@ -6,8 +6,6 @@ import { PiSkypeLogo } from "react-icons/pi";
 import { PiTwitterLogo } from "react-icons/pi";
 import { FaPinterest } from "react-icons/fa";
 
-
-
 function Footer() {
   return (
     <div className="bg-indigo-950 text-gray-300 p-4 sm:p-10 gap-20">
@@ -22,9 +20,6 @@ function Footer() {
           <li className="text-sm md:text-base">Popular this week</li>
           <li className="text-sm md:text-base">All products</li>
         </ul>
-
-
-
 
         {/* Second Column */}
         <ul className="space-y-2">
@@ -49,7 +44,9 @@ function Footer() {
 
         {/* Mailing List */}
         <div className="flex flex-col gap-4 w-full md:w-1/3">
-          <h1 className="text-lg md:text-xl font-semibold">Join our mailing list</h1>
+          <h1 className="text-lg md:text-xl font-semibold">
+            Join our mailing list
+          </h1>
           <div className="relative">
             <input
               type="text"
@@ -64,10 +61,15 @@ function Footer() {
       </div>
 
       <div className="flex text- pt-3 ">copyright 2022 avion LTD</div>
-    <div className="flex justify-end gap-3"><IoLogoLinkedin size={20} /><AiFillFacebook size={20} /><FaInstagram size={20}/><PiSkypeLogo size={20}/><PiTwitterLogo size={20}/><FaPinterest size={20}/></div>
-
+      <div className="flex justify-end gap-3">
+        <IoLogoLinkedin size={20} />
+        <AiFillFacebook size={20} />
+        <FaInstagram size={20} />
+        <PiSkypeLogo size={20} />
+        <PiTwitterLogo size={20} />
+        <FaPinterest size={20} />
       </div>
-    
+    </div>
   );
 }
 
