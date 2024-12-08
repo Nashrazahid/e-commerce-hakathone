@@ -1,101 +1,72 @@
 import Image from "next/image";
+import { TbTruckDelivery } from "react-icons/tb";
+import { FaCircleCheck } from "react-icons/fa6";
+import { CiCreditCard1 } from "react-icons/ci";
+import { RiLeafFill } from "react-icons/ri";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  <div>
+    <div className="relative w-full h-[70vh] md:h-[80vh]">
+    <Image src="/images/HeroBlocks.png.png" alt="image"
+    layout="fill" // Makes the image fill its parent container
+    objectFit="cover" // Ensures the image covers the entire area
+    quality={100} /></div>
+    <h1 className="flex justify-center text-2xl">What makes our brand different</h1>
+    <section className="bg-white py-10">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Feature 1 */}
+          <div className="text-center bg-pink-100 p-6 rounded-lg shadow-md">
+            <div className="text-xl mb-4"><TbTruckDelivery /></div>
+            <h3 className="text-xl flex mb-2">Next day as standard</h3>
+            <p className="text-sm text-gray-600">
+              Order before 3pm and get your order the next day as standard.
+            </p>
+          </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          {/* Feature 2 */}
+          <div className="text-center bg-pink-100 p-6 rounded-lg shadow-md">
+            <div className="text-xl mb-4"><FaCircleCheck/></div>
+            <h3 className="text-xl mb-2">Made by true artisans</h3>
+            <p className="text-sm text-gray-600">
+              Handmade crafted goods made with real passion and craftsmanship.
+            </p>
+          </div>
+
+          {/* Feature 3 */}
+          <div className="text-center bg-pink-100 p-6 rounded-lg shadow-md">
+            <div className="text-xl mb-4"><CiCreditCard1 /></div>
+            <h3 className="text-xl mb-2">Unbeatable prices</h3>
+            <p className="text-sm text-gray-600">
+              For our materials and quality, you won't find better prices anywhere.
+            </p>
+          </div>
+
+          {/* Feature 4 */}
+          <div className="text-center bg-pink-100 p-6 rounded-lg shadow-md">
+            <div className="text-xl mb-4"><RiLeafFill /></div>
+            <h3 className="text-xl mb-2">Recycled packaging</h3>
+            <p className="text-sm text-gray-600">
+              We use 100% recycled materials to ensure our footprint is more manageable.
+            </p>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
-}
+      </div>
+    </section>
+    <div  className="relative w-full h-[70vh] md:h-[80vh]">
+    <Image src="/images/Listings.png" alt="image"
+    layout="fill" // Makes the image fill its parent container
+    objectFit="cover" // Ensures the image covers the entire area
+    quality={100} /></div>
+    <div  className="relative w-full h-[70vh] md:h-[80vh]">
+    <Image src="/images/Features (1).png" alt="image"
+    layout="fill" // Makes the image fill its parent container
+    objectFit="cover" // Ensures the image covers the entire area
+    quality={100} /></div>
+     <div className="relative w-full h-[70vh] md:h-[80vh]">
+    <Image src="/images/Email sign-up.png" alt="image"
+    layout="fill" // Makes the image fill its parent container
+    objectFit="cover" // Ensures the image covers the entire area
+    quality={100} /></div>
+  </div>)}
