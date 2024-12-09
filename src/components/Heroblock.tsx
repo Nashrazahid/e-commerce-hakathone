@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import Link from "next/link";
 
 function Heroblock() {
   return (
@@ -10,7 +11,7 @@ function Heroblock() {
         <li>chairs</li>
         <li>crocery</li>
         <li>tableware</li>
-        <li>cutlery</li>        
+   <Link href="/about"><li>about</li></Link>        
         </ul>
     </div>
   )
