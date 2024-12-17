@@ -40,7 +40,7 @@ function Page() {
        
         <div className="lg:w-1/2 flex items-center justify-center">
           <Image
-            src="/images/image.png"
+            src="/images/Image.png"
             alt="Feature image"
             width={500}
             height={500}

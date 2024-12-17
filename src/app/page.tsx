@@ -104,7 +104,7 @@ export default function Home() {
       
         <div className="bg-white text-center">
           <Image
-            src="/images/Product Card (1).png"
+            src="/images/ProductCard.png"
             alt="Rustic Vase Set"
             width={300}
             height={300}
