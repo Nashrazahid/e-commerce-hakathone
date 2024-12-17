@@ -26,7 +26,7 @@ function page() {
           <TableRow>
             <TableCell className="flex items-start gap-4">
               <Image
-                src="/images/productImage.png"
+                src="/images/ProductImage.png"
                 alt="product image"
                 width={80}
                 height={80}
@@ -48,7 +48,7 @@ function page() {
           <TableRow>
             <TableCell className="flex items-start gap-4">
               <Image
-                src="/images/productTwo.png"
+                src="/images/ProductTwo.png"
                 alt="product image"
                 width={80}
                 height={80}
