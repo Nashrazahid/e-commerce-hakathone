@@ -11,37 +11,51 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import Link from "next/link";
 
 function Header() {
   return (
-    <div className="flex justify-items-center border-b-2 p-2 relative">
-      <div className="hidden sm:flex">
+    <div className="flex items-center border-b-2 p-2 relative">
+      {/* Search Icon for Large Screens */}
+      <div className="hidden sm:flex items-center">
         <CiSearch size={22} />
       </div>
-      <div className="md:text-center sm:text-center text-left text-2xl 2xl:text-center lg:text-center xl:text-center w-full">
+
+      {/* Left-Aligned Logo for Mobile and Centered for Larger Screens */}
+      <div className="text-2xl font-semibold sm:flex-1 sm:text-center text-left">
         Avion
       </div>
-      <div className="gap-2 sm:flex hidden md:ml-auto ml-auto ">
-        <Link href="/cart">
+
+      {/* Right Icons for Large Screens */}
+      <div className="gap-4 sm:flex hidden items-center">
+        <Link href="/cart" className="hover:text-gray-600">
           <IoCartOutline size={20} />
         </Link>
         <CgProfile size={20} />
       </div>
-      <div className="flex sm:hidden ml-auto md:hidden ">
+
+      {/* Right Icons for Mobile */}
+      <div className="flex sm:hidden ml-auto items-center gap-2 relative">
         <CiSearch size={22} />
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger className="relative">
             <IoReorderTwo size={22} />
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent
+            className="absolute top-full right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-50"
+          >
             <DropdownMenuLabel>
-              <IoCartOutline size={20} />
+              <Link href="/cart" className="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-md">
+                <IoCartOutline size={20} />
+                <span>Cart</span>
+              </Link>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <CgProfile size={20} />
+              <div className="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-md">
+                <CgProfile size={20} />
+                <span>Profile</span>
+              </div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

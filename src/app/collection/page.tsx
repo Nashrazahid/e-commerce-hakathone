@@ -9,51 +9,51 @@ function page() {
       <div className="bg-black bg-opacity-50 text-white py-16 px-4 text-center">
         <h1 className="text-3xl md:text-5xl font-light">All products</h1>
       </div>
+      <div className="bg-white shadow-md py-4 px-4 sm:px-8 flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
+  {/* Left Section */}
+  <div className="flex flex-wrap gap-2 sm:gap-4">
+    <select className="w-full sm:w-auto border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-gray-400">
+      <option>Category</option>
+      <option>Furniture</option>
+      <option>Decor</option>
+    </select>
 
-      {/* Filter Bar */}
-      <div className="bg-white shadow-md py-4 px-4 sm:px-8 flex flex-wrap justify-between items-center">
-        {/* Left Section */}
-        <div className="flex flex-wrap gap-4">
-          <select className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-gray-400">
-            <option>Category</option>
-            <option>Furniture</option>
-            <option>Decor</option>
-          </select>
+    <select className="w-full sm:w-auto border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-gray-400">
+      <option>Product type</option>
+      <option>Chair</option>
+      <option>Vase</option>
+    </select>
 
-          <select className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-gray-400">
-            <option>Product type</option>
-            <option>Chair</option>
-            <option>Vase</option>
-          </select>
+    <select className="w-full sm:w-auto border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-gray-400">
+      <option>Price</option>
+      <option>Low to High</option>
+      <option>High to Low</option>
+    </select>
 
-          <select className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-gray-400">
-            <option>Price</option>
-            <option>Low to High</option>
-            <option>High to Low</option>
-          </select>
+    <select className="w-full sm:w-auto border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-gray-400">
+      <option>Brand</option>
+      <option>Brand A</option>
+      <option>Brand B</option>
+    </select>
+  </div>
 
-          <select className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-gray-400">
-            <option>Brand</option>
-            <option>Brand A</option>
-            <option>Brand B</option>
-          </select>
-        </div>
+  {/* Right Section */}
+  <div className="flex flex-wrap gap-2 sm:gap-4">
+    <select className="w-full sm:w-auto border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-gray-400">
+      <option>Sorting by</option>
+      <option>Popularity</option>
+      <option>Newest</option>
+    </select>
 
-        {/* Right Section */}
-        <div className="flex flex-wrap gap-4">
-          <select className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-gray-400">
-            <option>Sorting by</option>
-            <option>Popularity</option>
-            <option>Newest</option>
-          </select>
+    <select className="w-full sm:w-auto border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-gray-400">
+      <option>Date added</option>
+      <option>Last Week</option>
+      <option>Last Month</option>
+    </select>
+  </div>
+</div>
 
-          <select className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-gray-400">
-            <option>Date added</option>
-            <option>Last Week</option>
-            <option>Last Month</option>
-          </select>
-        </div>
-      </div>
+
     </div>
     <div className="bg-gray-50">
       {/* Grid container */}
