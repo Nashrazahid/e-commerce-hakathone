@@ -22,7 +22,7 @@ function Header() {
       </div>
 
       {/* Left-Aligned Logo for Mobile and Centered for Larger Screens */}
-      <div className="text-2xl font-semibold sm:flex-1 sm:text-center text-left">
+      <div className="text-2xl font-semibold sm:flex-1 sm:text-center text-left ">
         Avion
       </div>
 
