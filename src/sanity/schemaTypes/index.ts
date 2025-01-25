@@ -1,5 +1,5 @@
 import { type SchemaTypeDefinition } from 'sanity'
-import {product} from "./product"
+import {product} from "./products"
 import {Category} from "./category"
 
 

@@ -2,7 +2,6 @@ import React from 'react';
 import Link from "next/link";
 
 
-
 function Heroblock() {
   return (
     <div>
@@ -22,7 +21,7 @@ function Heroblock() {
     </div>
   );
 }
-
-
-
 export default Heroblock
+
+
+

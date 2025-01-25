@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Heroblock from "@/components/Heroblock";
 
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -33,9 +34,10 @@ export default function RootLayout({
       > 
       <Header/>
       <Heroblock/>
-        {children}
+      {children}
         <Footer/>
       </body>
     </html>
   );
+
 }
