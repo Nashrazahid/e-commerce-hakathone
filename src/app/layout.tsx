@@ -4,6 +4,14 @@ import "./globals.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Heroblock from "@/components/Heroblock";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton
+} from '@clerk/nextjs'
+import './globals.css'
 
 
 const geistSans = localFont({
@@ -28,16 +36,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <ClerkProvider>
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      > 
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}> 
       <Header/>
       <Heroblock/>
       {children}
         <Footer/>
       </body>
     </html>
+    </ClerkProvider>
   );
 
 }
