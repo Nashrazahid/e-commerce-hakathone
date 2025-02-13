@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react"; // Trash icon
+import Image from "next/image";
 
 interface CartItem {
   name: string;
@@ -80,10 +81,12 @@ function CartPage() {
           >
             {/* Left Section: Image + Product Details */}
             <div className="flex items-center gap-4">
-              <img
+              <Image
                 src={item.image?.asset.url || "/images/default-product.png"}
                 alt={item.name}
-                className="w-24 h-24 object-cover rounded-md"
+                height= {24}
+                width= {24}
+                className="w-24 h-24 object-cover "
               />
               <div>
                 <h2 className="text-lg font-semibold">{item.name}</h2>

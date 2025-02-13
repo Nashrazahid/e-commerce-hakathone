@@ -1,4 +1,9 @@
+
 import { NextRequest, NextResponse } from "next/server";
+
+interface CartItem {
+  weight?: number;  // Make weight optional since the prompt says `item.weight || 1`
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -49,7 +54,7 @@ export async function POST(req: NextRequest) {
               postal_code: address.zipCode,
               country_code: address.country,
             },
-            packages: cartItems.map((item: any) => ({
+            packages: cartItems.map((item: CartItem) => ({  // Use the CartItem type here
               weight: { value: item.weight || 1, unit: "pound" },
             })),
           },

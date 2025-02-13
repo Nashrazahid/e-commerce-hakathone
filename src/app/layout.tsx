@@ -6,10 +6,6 @@ import Footer from "../components/Footer";
 import Heroblock from "@/components/Heroblock";
 import {
   ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton
 } from '@clerk/nextjs'
 import './globals.css'
 

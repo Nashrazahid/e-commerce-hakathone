@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { client as sanityClient } from "@/sanity/lib/client";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 interface Product {
   name: string;
@@ -59,9 +60,11 @@ function CategoryPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
           <div key={product.slug.current} className="border rounded-lg p-4">
-            <img
+            <Image
               src={product.image?.asset?.url || "/images/default-product.png"}
               alt={product.name}
+              height={48}
+              width={48}
               className="w-full h-48 object-cover rounded mb-4"
             />
             <h2 className="text-lg font-semibold">{product.name}</h2>

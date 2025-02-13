@@ -139,10 +139,15 @@ const CheckoutForm: React.FC<{
             }
 
             setLoading(false);
-        } catch (err: any) {
-            setError(`An unexpected error occurred: ${err.message}`);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(`An unexpected error occurred: ${err.message}`);
+            } else {
+                setError("An unexpected error occurred.");
+            }
             setLoading(false);
         }
+        
     };
 
     return (

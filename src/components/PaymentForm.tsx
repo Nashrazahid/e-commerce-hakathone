@@ -2,11 +2,18 @@
 import React, { useEffect, useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
+interface CartItem {
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+
 function PaymentForm() {
   const stripe = useStripe();
   const elements = useElements();
   
-  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [loading, setLoading] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
