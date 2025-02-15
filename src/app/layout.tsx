@@ -4,10 +4,8 @@ import "./globals.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Heroblock from "@/components/Heroblock";
-import {
-  ClerkProvider,
-} from '@clerk/nextjs'
-import './globals.css'
+import './globals.css';
+import { ClerkProvider } from "@clerk/nextjs";
 
 
 const geistSans = localFont({
