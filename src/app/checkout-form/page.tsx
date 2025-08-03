@@ -1,406 +1,863 @@
-"use client";
+// "use client";
 
-import React, { useEffect, useState } from "react";
-import { loadStripe } from "@stripe/stripe-js";
+// import React, { useEffect, useState } from "react";
+// import { loadStripe } from "@stripe/stripe-js";
+// import {
+//   Elements,
+//   PaymentElement,
+//   useStripe,
+//   useElements,
+// } from "@stripe/react-stripe-js";
+// import { createPaymentIntent } from "../checkout/action";
+// import { useRouter } from "next/navigation";
+
+// interface FormData {
+//   firstName: string;
+//   lastName: string;
+//   companyName: string;
+//   country: string;
+//   streetAddress: string;
+//   zipCode: string;
+//   paymentMethod: "bank_transfer" | "cod" | "stripe";
+// }
+
+// interface CartItem {
+//   id: string;
+//   name: string;
+//   price: number;
+//   quantity: number;
+// }
+
+// const stripePromise = loadStripe(
+//   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
+// );
+
+// const CheckoutPage: React.FC = () => {
+//   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+//   const [deliveryCharges, setDeliveryCharges] = useState<number>(200); // £2.00
+//   const [formData, setFormData] = useState<FormData>({
+//     firstName: "",
+//     lastName: "",
+//     companyName: "",
+//     country: "United Kingdom",
+//     streetAddress: "",
+//     zipCode: "",
+//     paymentMethod: "bank_transfer",
+//   });
+
+//   const [clientSecret, setClientSecret] = useState<string | null>(null);
+//   const router = useRouter();
+
+//   useEffect(() => {
+//     const cartData = localStorage.getItem("cart");
+//     const parsed = cartData ? JSON.parse(cartData) : [];
+//     setCartItems(parsed);
+
+//     const total = parsed.reduce(
+//       (sum: number, item: CartItem) => sum + item.price * item.quantity,
+//       0
+//     );
+//     const totalWithDelivery = total * 100 + deliveryCharges;
+
+//     createPaymentIntent(totalWithDelivery).then((res: { clientSecret: string | null }) => {
+//       setClientSecret(res.clientSecret);
+//     });
+//   }, []);
+
+//   const calculateTotal = () => {
+//     const subtotal = cartItems.reduce(
+//       (total, item) => total + item.price * item.quantity,
+//       0
+//     );
+//     return subtotal + deliveryCharges / 100;
+//   };
+
+//   const handleInputChange = (
+//     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+//   ) => {
+//     const { name, value } = e.target;
+//     setFormData({ ...formData, [name]: value });
+//   };
+
+//   const handlePlaceOrder = async () => {
+//     const response = await fetch("/api/place-order", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({
+//         ...formData,
+//         cartItems,
+//         deliveryCharges,
+//         total: calculateTotal(),
+//       }),
+//     });
+
+//     const result = await response.json();
+//     if (result.error) {
+//       alert("Order failed: " + result.error);
+//     } else {
+//       // ✅ Send order to Sanity
+//       try {
+//         await fetch("/api/create-order", {
+//           method: "POST",
+//           headers: { "Content-Type": "application/json" },
+//           body: JSON.stringify({
+//             customerName: `${formData.firstName} ${formData.lastName}`,
+//             email: "nashra@example.com",
+//             address: `${formData.streetAddress}, ${formData.country}, ZIP: ${formData.zipCode}`,
+//             products: cartItems.map((item) => ({
+//               productId: item.id,
+//               productName: item.name,
+//               quantity: item.quantity,
+//               price: item.price,
+//             })),
+//             totalAmount: calculateTotal() * 100,
+//           }),
+//         });
+//       } catch (err) {
+//         console.error("Sanity order failed:", err);
+//       }
+
+//       alert(`Order placed! Order ID: ${result.orderId}`);
+//       router.push("/success");
+//     }
+//   };
+
+//   if (!clientSecret && formData.paymentMethod === "stripe") {
+//     return <div>Loading payment details...</div>;
+//   }
+
+//   return (
+//     <div className="min-h-screen px-6 py-12">
+//       <div className="max-w-4xl mx-auto grid lg:grid-cols-2 gap-10">
+//         {/* Billing Details */}
+//         <div>
+//           <h2 className="text-2xl font-bold mb-6">Billing Details</h2>
+//           <div className="space-y-4">
+//             <input
+//               name="firstName"
+//               value={formData.firstName}
+//               onChange={handleInputChange}
+//               className="w-full p-2 border rounded"
+//               placeholder="First Name"
+//             />
+//             <input
+//               name="lastName"
+//               value={formData.lastName}
+//               onChange={handleInputChange}
+//               className="w-full p-2 border rounded"
+//               placeholder="Last Name"
+//             />
+//             <input
+//               name="companyName"
+//               value={formData.companyName}
+//               onChange={handleInputChange}
+//               className="w-full p-2 border rounded"
+//               placeholder="Company (optional)"
+//             />
+//             <input
+//               name="streetAddress"
+//               value={formData.streetAddress}
+//               onChange={handleInputChange}
+//               className="w-full p-2 border rounded"
+//               placeholder="Street Address"
+//             />
+//             <input
+//               name="zipCode"
+//               value={formData.zipCode}
+//               onChange={handleInputChange}
+//               className="w-full p-2 border rounded"
+//               placeholder="ZIP Code"
+//             />
+//             <input
+//               name="city"
+//               value={formData.zipCode}
+//               onChange={handleInputChange}
+//               className="w-full p-2 border rounded"
+//               placeholder="city"
+//             />
+//              <h2 className="text-1xl font-semibold mt-[-2]">Country</h2>
+//             <select
+//               name="country"
+//               value={formData.country}
+//               onChange={handleInputChange}
+//               className="w-full p-2 border rounded"
+//             >
+//               <option>United Kingdom</option>
+//               <option>United States</option>
+//               <option>Pakistan</option>
+//             </select>
+//             {/* <select
+//               name="paymentMethod"
+//               value={formData.paymentMethod}
+//               onChange={handleInputChange}
+//               className="w-full p-2 border rounded"
+//             >
+//               <option value="bank_transfer">Bank Transfer</option>
+//               <option value="cod">Cash on Delivery</option>
+//               <option value="stripe">Credit/Debit Card (Stripe)</option>
+//             </select> */}
+
+//    <div className="mt-4">
+//               <p className="font-medium mb-2">Select Payment Method:</p>
+//               <label className="flex items-center space-x-2">
+//                 <input
+//                   type="radio"
+//                   name="paymentMethod"
+//                   value="cod"
+//                   checked={formData.paymentMethod === "cod"}
+//                   onChange={handleInputChange}
+//                 />
+//                 <span>Cash on Delivery</span>
+//               </label>
+//               <label className="flex items-center space-x-2 mt-2">
+//                 <input
+//                   type="radio"
+//                   name="paymentMethod"
+//                   value="stripe"
+//                   checked={formData.paymentMethod === "bank_transfer"}
+//                   onChange={handleInputChange}
+//                 />
+//                 <span>Credit/Debit Card (Stripe)</span>
+//               </label>
+//             </div>
+
+
+
+
+//           </div>
+//         </div>
+
+//         {/* Order Summary */}
+//         <div>
+//           <h2 className="text-2xl font-bold mb-4 text-center">Order Summary</h2>
+//           <div className="border rounded-lg p-6 bg-gray-50">
+//             {cartItems.map((item, i) => (
+//               <div key={i} className="flex justify-between mb-2">
+//                 <p>
+//                   {item.name} x {item.quantity}
+//                 </p>
+//                 <p>£{(item.price * item.quantity).toFixed(2)}</p>
+//               </div>
+//             ))}
+//             <div className="border-t pt-2 mt-2">
+//               <p>Delivery: £{(deliveryCharges / 100).toFixed(2)}</p>
+//               <p className="font-bold mt-2">
+//                 Total: £{calculateTotal().toFixed(2)}
+//               </p>
+//             </div>
+//           </div>
+
+//           {/* Payment */}
+//           {formData.paymentMethod === "stripe" && clientSecret ? (
+//             <Elements stripe={stripePromise} options={{ clientSecret }}>
+//               <StripePaymentForm totalAmount={calculateTotal()} />
+//             </Elements>
+//           ) : (
+//             <button
+//               onClick={handlePlaceOrder}
+//               className="w-full bg-black text-white py-3 mt-6 rounded-md"
+//             >
+//               Place Order
+//             </button>
+//           )}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+
+// function StripePaymentForm({ totalAmount }: { totalAmount: number }) {
+//   const stripe = useStripe();
+//   const elements = useElements();
+//   const [isProcessing, setIsProcessing] = useState(false);
+//   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+//   const router = useRouter();
+
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     if (!stripe || !elements) return;
+//     setIsProcessing(true);
+
+//     const { error } = await stripe.confirmPayment({
+//       elements,
+//       confirmParams: {},
+//       redirect: "if_required",
+//     });
+
+//     if (error) {
+//       setErrorMessage(error.message || "Payment error occurred.");
+//       setIsProcessing(false);
+//     } else {
+//       alert("Payment successful!");
+//       router.push("/success");
+//     }
+//   };
+
+//   return (
+//     <form onSubmit={handleSubmit} className="mt-6">
+//       <PaymentElement />
+//       <button
+//         type="submit"
+//         disabled={!stripe || isProcessing}
+//         className="w-full bg-yellow-600 text-white py-3 mt-6 rounded-md"
+//       >
+//         {isProcessing ? "Processing..." : `Pay £${totalAmount.toFixed(2)}`}
+//       </button>
+//       {errorMessage && (
+//         <div className="text-red-600 mt-2">{errorMessage}</div>
+//       )}
+//     </form>
+//   );
+// }
+
+// export default CheckoutPage;
+
+
+
+
+
+
+
+
+
+
+// 
+
+
+
+
+
+
+// "use client";
+
+// import React, { useEffect, useState } from "react";
+// import { loadStripe } from "@stripe/stripe-js";
+// import {
+//   Elements,
+//   PaymentElement,
+//   useStripe,
+//   useElements,
+// } from "@stripe/react-stripe-js";
+// import { createPaymentIntent } from "../checkout/action";
+// import { useRouter } from "next/navigation";
+
+// interface FormData {
+//   firstName: string;
+//   lastName: string;
+//   phoneNo: string;
+//   country: string;
+//   streetAddress: string;
+//   zipCode: string;
+//   city: string;
+//   state: string;
+//   paymentMethod: "bank_transfer" | "cod" | "stripe";
+// }
+
+// interface CartItem {
+//   id: string;
+//   name: string;
+//   price: number;
+//   quantity: number;
+// }
+
+// const stripePromise = loadStripe(
+//   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
+// );
+
+// const CheckoutPage: React.FC = () => {
+//   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+//   const [deliveryCharges, setDeliveryCharges] = useState<number>(0);
+//   const [formData, setFormData] = useState<FormData>({
+//     firstName: "",
+//     lastName: "",
+//     phoneNo: "",
+//     country: "United Kingdom",
+//     streetAddress: "",
+//     zipCode: "",
+//     city: "",
+//     state: "",
+//     paymentMethod: "bank_transfer",
+//   });
+
+//   const [clientSecret, setClientSecret] = useState<string | null>(null);
+//   const router = useRouter();
+
+//   useEffect(() => {
+//     const cartData = localStorage.getItem("cart");
+//     const parsed = cartData ? JSON.parse(cartData) : [];
+//     setCartItems(parsed);
+
+//     const total = parsed.reduce(
+//       (sum: number, item: CartItem) => sum + item.price * item.quantity,
+//       0
+//     );
+//     const totalWithDelivery = total * 100 + deliveryCharges;
+
+//     createPaymentIntent(totalWithDelivery).then((res: { clientSecret: string | null }) => {
+//       setClientSecret(res.clientSecret);
+//     });
+//   }, [deliveryCharges]);
+
+//   const calculateTotal = () => {
+//     const subtotal = cartItems.reduce(
+//       (total, item) => total + item.price * item.quantity,
+//       0
+//     );
+//     return subtotal + deliveryCharges / 100;
+//   };
+
+//   const handleInputChange = (
+//     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+//   ) => {
+//     const { name, value } = e.target;
+//     setFormData({ ...formData, [name]: value });
+//   };
+
+//   const handlePlaceOrder = async () => {
+//     try {
+//       const shipToAddress = {
+//         name: `${formData.firstName} ${formData.lastName}`,
+//         phone: formData.phoneNo || "00000000000",
+//         addressLine1: formData.streetAddress,
+//         cityLocality: formData.city,
+//         stateProvince: formData.state || "N/A",
+//         postalCode: formData.zipCode,
+//         countryCode:
+//           formData.country === "Pakistan"
+//             ? "PK"
+//             : formData.country === "United Kingdom"
+//               ? "GB"
+//               : "US",
+//         addressResidentialIndicator: "yes",
+//       };
+
+//       const shipRes = await fetch("/api/trackInfo", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ shipToAddress }),
+//       });
+
+//       const shipData = await shipRes.json();
+
+//       if (!shipData.trackingNo) {
+//         alert("Failed to generate shipping details");
+//         return;
+//       }
+
+//       setDeliveryCharges(shipData.deliveryCharge * 100); // update delivery charge in UI
+
+//       const response = await fetch("/api/place-order", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({
+//           ...formData,
+//           cartItems,
+//           deliveryCharges: shipData.deliveryCharge * 100,
+//           total: calculateTotal() + shipData.deliveryCharge,
+//           shippingDetails: shipData,
+//         }),
+//       });
+
+//       const result = await response.json();
+//       if (result.error) {
+//         alert("Order failed: " + result.error);
+//         return;
+//       }
+
+//       await fetch("/api/create-order", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({
+//           customerName: `${formData.firstName} ${formData.lastName}`,
+//           email: "nashra@example.com",
+//           address: `${formData.streetAddress}, ${formData.country}, ZIP: ${formData.zipCode}`,
+//           products: cartItems.map((item) => ({
+//             productId: item.id,
+//             productName: item.name,
+//             quantity: item.quantity,
+//             price: item.price,
+//           })),
+//           totalAmount: (calculateTotal() + shipData.deliveryCharge) * 100,
+//           trackingNumber: shipData.trackingNo,
+//           labelId: shipData.labelId,
+//           courier: shipData.carrier,
+//           shippingDays: shipData.estimatedDays,
+//         }),
+//       });
+
+//       alert(`Order placed! Tracking No: ${shipData.trackingNo}`);
+//       router.push("/success");
+//     } catch (err) {
+//       console.error("Checkout error:", err);
+//       alert("Something went wrong during checkout.");
+//     }
+//   };
+
+//   return (
+//     <div className="min-h-screen px-6 py-12">
+//       <div className="max-w-4xl mx-auto grid lg:grid-cols-2 gap-10">
+//         {/* Billing Details */}
+//         <div>
+//           <h2 className="text-2xl font-bold mb-6">Billing Details</h2>
+//           <div className="space-y-4">
+//             {["firstName", "lastName", "phoneNo", "streetAddress", "zipCode", "city", "state"].map((field) => (
+//               <input
+//                 key={field}
+//                 name={field}
+//                 value={(formData as any)[field]}
+//                 onChange={handleInputChange}
+//                 className="w-full p-2 border rounded"
+//                 placeholder={field}
+//               />
+//             ))}
+
+//             <h2 className="text-1xl font-semibold mt-[-2]">Country</h2>
+//             <select
+//               name="country"
+//               value={formData.country}
+//               onChange={handleInputChange}
+//               className="w-full p-2 border rounded"
+//             >
+//               <option>United Kingdom</option>
+//               <option>United States</option>
+//               <option>Pakistan</option>
+//             </select>
+
+//             <div className="mt-4">
+//               <p className="font-medium mb-2">Select Payment Method:</p>
+//               <label className="flex items-center space-x-2">
+//                 <input
+//                   type="radio"
+//                   name="paymentMethod"
+//                   value="cod"
+//                   checked={formData.paymentMethod === "cod"}
+//                   onChange={handleInputChange}
+//                 />
+//                 <span>Cash on Delivery</span>
+//               </label>
+//               <label className="flex items-center space-x-2 mt-2">
+//                 <input
+//                   type="radio"
+//                   name="paymentMethod"
+//                   value="stripe"
+//                   checked={formData.paymentMethod === "stripe"}
+//                   onChange={handleInputChange}
+//                 />
+//                 <span>Credit/Debit Card (Stripe)</span>
+//               </label>
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* Order Summary */}
+//         <div>
+//           <h2 className="text-2xl font-bold mb-4 text-center">Order Summary</h2>
+//           <div className="border rounded-lg p-6 bg-gray-50">
+//             {cartItems.map((item, i) => (
+//               <div key={i} className="flex justify-between mb-2">
+//                 <p>{item.name} x {item.quantity}</p>
+//                 <p>£{(item.price * item.quantity).toFixed(2)}</p>
+//               </div>
+//             ))}
+//             <div className="border-t pt-2 mt-2">
+//               <p>Delivery: £{(deliveryCharges / 100).toFixed(2)}</p>
+//               <p className="font-bold mt-2">Total: £{calculateTotal().toFixed(2)}</p>
+//             </div>
+//           </div>
+
+//           {formData.paymentMethod === "stripe" && clientSecret ? (
+//             <Elements stripe={stripePromise} options={{ clientSecret }}>
+//               <StripePaymentForm
+//                 totalAmount={calculateTotal()}
+//                 handlePlaceOrder={handlePlaceOrder}
+//               />
+//             </Elements>
+//           ) : (
+//             <button
+//               onClick={handlePlaceOrder}
+//               className="w-full bg-black text-white py-3 mt-6 rounded-md"
+//             >
+//               Place Order
+//             </button>
+//           )}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// function StripePaymentForm({
+//   totalAmount,
+//   handlePlaceOrder,
+// }: {
+//   totalAmount: number;
+//   handlePlaceOrder: () => Promise<void>;
+// }) {
+//   const stripe = useStripe();
+//   const elements = useElements();
+//   const [isProcessing, setIsProcessing] = useState(false);
+//   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+//   const router = useRouter();
+
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     if (!stripe || !elements) return;
+//     setIsProcessing(true);
+
+//     const { error } = await stripe.confirmPayment({
+//       elements,
+//       confirmParams: {},
+//       redirect: "if_required",
+//     });
+
+//     if (error) {
+//       setErrorMessage(error.message || "Payment error occurred.");
+//       setIsProcessing(false);
+//     } else {
+//       await handlePlaceOrder();
+//       router.push("/success");
+//     }
+//   };
+
+//   return (
+//     <form onSubmit={handleSubmit} className="mt-6">
+//       <PaymentElement />
+//       <button
+//         type="submit"
+//         disabled={!stripe || isProcessing}
+//         className="w-full bg-yellow-600 text-white py-3 mt-6 rounded-md"
+//       >
+//         {isProcessing ? "Processing..." : `Pay £${totalAmount.toFixed(2)}`}
+//       </button>
+//       {errorMessage && (
+//         <div className="text-red-600 mt-2">{errorMessage}</div>
+//       )}
+//     </form>
+//   );
+// }
+
+// export default CheckoutPage;
+
+
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
 import {
-    Elements,
-    CardElement,
-    useStripe,
-    useElements,
-} from "@stripe/react-stripe-js";
+  Elements,
+  PaymentElement,
+  useStripe,
+  useElements,
+} from '@stripe/react-stripe-js';
+import { useRouter } from 'next/navigation';
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "your-publishable-key-here"); //Added fallback and env variable
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 interface FormData {
-    firstName: string;
-    lastName: string;
-    companyName: string;
-    country: string;
-    streetAddress: string;
-    zipCode: string;
-    paymentMethod: "bank_transfer" | "cod" | "stripe";
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+  address: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  paymentMethod: 'card' | 'cod';
 }
 
-interface CartItem {
-    id: string;
-    name: string;
-    price: number;
-    quantity: number;
-}
+const CheckoutFormInner = () => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const router = useRouter();
 
-const CheckoutForm: React.FC<{
-    formData: FormData;
-    cartItems: CartItem[];
-    deliveryCharges: number | null;
-    calculateTotal: () => number;
-}> = ({ formData, cartItems, deliveryCharges, calculateTotal }) => {
-    const stripe = useStripe();
-    const elements = useElements();
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState<FormData>({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    email: '',
+    address: '',
+    city: '',
+    state: '',
+    postalCode: '',
+    country: '',
+    paymentMethod: 'card',
+  });
 
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
+  const [deliveryCharge, setDeliveryCharge] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
 
-        if (!stripe || !elements) {
-            console.warn("Stripe or Elements is not yet initialized.");
-            return;
-        }
+  useEffect(() => {
+    const getDeliveryCharge = async () => {
+      try {
+        const response = await fetch('/api/trackInfo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            shipToAddress: {
+              name: `${formData.firstName} ${formData.lastName}`,
+              phone: formData.phone,
+              addressLine1: formData.address,
+              cityLocality: formData.city,
+              stateProvince: formData.state,
+              postalCode: formData.postalCode,
+              countryCode: formData.country,
+              addressResidentialIndicator: 'yes',
+            },
+          }),
+        });
 
-        setLoading(true);
-        setError(null);
-
-        try {
-            const cardElement = elements.getElement(CardElement);
-
-            if (!cardElement) {
-                setError("Card element not found.");
-                setLoading(false);
-                return;
-            }
-
-            const { error, paymentMethod } = await stripe.createPaymentMethod({
-                type: "card",
-                card: cardElement,
-            });
-
-            if (error) {
-                setError(error.message || "An unexpected error occurred.");
-                setLoading(false);
-                return;
-            }
-
-            if (!paymentMethod) {
-                setError("Failed to create payment method.");
-                setLoading(false);
-                return;
-            }
-
-            const response = await fetch("/api/create-payment-intent", {  //Changed endpoint
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    amount: Math.round(calculateTotal() * 100), // Amount in cents
-                    currency: "usd",
-                }),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                setError(`Payment intent creation failed: ${errorData.error}`);
-                setLoading(false);
-                return;
-            }
-
-            const paymentIntentData = await response.json();
-
-            if (paymentIntentData.error) {
-                setError(paymentIntentData.error);
-                setLoading(false);
-                return;
-            }
-
-            const { client_secret } = paymentIntentData;
-
-            const { error: confirmError } = await stripe.confirmCardPayment(client_secret, {
-                payment_method: paymentMethod.id,
-            });
-
-            if (confirmError) {
-                setError(confirmError.message || "An unexpected error occurred.");
-                setLoading(false);
-                return;
-            }
-
-            // Payment successful, place the order
-            const orderResponse = await fetch("/api/place-order", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    ...formData,
-                    cartItems,
-                    deliveryCharges,
-                    total: calculateTotal(),
-                    paymentMethod: "stripe",
-                }),
-            });
-
-            const order = await orderResponse.json();
-
-            if (order.error) {
-                setError(order.error);
-            } else {
-                // Handle successful order placement
-                alert(`Order placed successfully! Order ID: ${order.orderId}`);
-            }
-
-            setLoading(false);
-        } catch (err: unknown) {
-            if (err instanceof Error) {
-                setError(`An unexpected error occurred: ${err.message}`);
-            } else {
-                setError("An unexpected error occurred.");
-            }
-            setLoading(false);
-        }
-        
+        const data = await response.json();
+        setDeliveryCharge(data.deliveryCharge);
+        console.log('ShipEngine data:', data);
+      } catch (error) {
+        console.error('ShipEngine error:', error);
+      }
     };
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <CardElement
-                onChange={(event) => {
-                    if (event.error) {
-                        setError(event.error.message);
-                    } else {
-                        setError(null);
-                    }
-                }}
-            />
-            {error && <div className="text-red-500">{error}</div>}
-            <button
-                type="submit"
-                disabled={!stripe || loading}
-                className="w-full bg-black text-white font-semibold py-3 mt-6 rounded-lg"
-            >
-                {loading ? "Processing..." : "Pay Now"}
-            </button>
-        </form>
-    );
-};
+    if (formData.firstName && formData.address && formData.city) {
+      getDeliveryCharge();
+    }
+  }, [formData]);
 
-const Page: React.FC = () => {
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
-    const [deliveryCharges, setDeliveryCharges] = useState<number | null>(null);
-    const [formData, setFormData] = useState<FormData>({
-        firstName: "",
-        lastName: "",
-        companyName: "",
-        country: "Pakistan",
-        streetAddress: "",
-        zipCode: "",
-        paymentMethod: "bank_transfer",
-    });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-    useEffect(() => {
-        const cartData = localStorage.getItem("cart");
-        let cart: CartItem[] = [];
+    if (formData.paymentMethod === 'card') {
+      if (!stripe || !elements) return;
+      setLoading(true);
 
-        try {
-            cart = cartData ? JSON.parse(cartData) : [];
-        } catch (error) {
-            console.error("Error parsing cart data from localStorage:", error);
-            cart = [];
-        }
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${window.location.origin}/success`,
+        },
+      });
 
-        setCartItems(cart);
-        calculateDeliveryCharges(cart);
-    }, []);
+      if (error) {
+        alert(error.message);
+      }
+      setLoading(false);
+    } else {
+      // COD logic
+      alert('Order placed with Cash on Delivery');
+      router.push('/success');
+    }
+  };
 
-    const calculateDeliveryCharges = (cart: CartItem[]) => {
-        setDeliveryCharges(cart.length > 0 ? 200 : 0);
-    };
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4 p-4 max-w-lg mx-auto">
+      <h2 className="text-xl font-bold">Checkout</h2>
 
-    const calculateTotal = () => {
-        const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-        return subtotal + (deliveryCharges || 0);
-    };
+      <input
+        type="text"
+        placeholder="First Name"
+        value={formData.firstName}
+        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+        required
+      />
+      <input
+        type="text"
+        placeholder="Last Name"
+        value={formData.lastName}
+        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+        required
+      />
+      <input
+        type="text"
+        placeholder="Phone"
+        value={formData.phone}
+        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+        required
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        value={formData.email}
+        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        required
+      />
+      <input
+        type="text"
+        placeholder="Address"
+        value={formData.address}
+        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+        required
+      />
+      <input
+        type="text"
+        placeholder="City"
+        value={formData.city}
+        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+        required
+      />
+      <input
+        type="text"
+        placeholder="State"
+        value={formData.state}
+        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+        required
+      />
+      <input
+        type="text"
+        placeholder="Postal Code"
+        value={formData.postalCode}
+        onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
+        required
+      />
+      <input
+        type="text"
+        placeholder="Country"
+        value={formData.country}
+        onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+        required
+      />
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+      <div className="space-x-4">
+        <label>
+          <input
+            type="radio"
+            value="card"
+            checked={formData.paymentMethod === 'card'}
+            onChange={() => setFormData({ ...formData, paymentMethod: 'card' })}
+          />
+          Card
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="cod"
+            checked={formData.paymentMethod === 'cod'}
+            onChange={() => setFormData({ ...formData, paymentMethod: 'cod' })}
+          />
+          Cash on Delivery
+        </label>
+      </div>
 
-    return (
-        <div className="flex justify-center items-center min-h-screen px-6 py-12">
-            <div className="w-full max-w-4xl grid lg:grid-cols-2 grid-cols-1 gap-12">
-                {/* Billing Details */}
-                <div>
-                    <h1 className="text-2xl font-bold mb-6 text-center">Billing Details</h1>
-                    <div className="space-y-4">
-                        <div className="grid md:grid-cols-2 gap-4">
-                            <div>
-                                <label className="text-md font-semibold block">First Name</label>
-                                <input
-                                    type="text"
-                                    className="border border-gray-400 h-12 p-3 rounded-md w-full"
-                                    required
-                                    name="firstName"
-                                    value={formData.firstName}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div>
-                                <label className="text-md font-semibold block">Last Name</label>
-                                <input
-                                    type="text"
-                                    className="border border-gray-400 h-12 p-3 rounded-md w-full"
-                                    required
-                                    name="lastName"
-                                    value={formData.lastName}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <label className="text-md font-semibold block">Company Name (Optional)</label>
-                            <input
-                                type="text"
-                                className="border border-gray-400 h-12 p-3 rounded-md w-full"
-                                name="companyName"
-                                value={formData.companyName}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-
-                        <div>
-                            <label className="text-md font-semibold block">Country/Region</label>
-                            <select
-                                className="border border-gray-400 h-12 p-3 rounded-md w-full"
-                                name="country"
-                                value={formData.country}
-                                onChange={handleInputChange}
-                            >
-                                <option>Pakistan</option>
-                                <option>Saudi Arabia</option>
-                                <option>Australia</option>
-                                <option>Sri Lanka</option>
-                                <option>Dubai</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="text-md font-semibold block">Street Address</label>
-                            <input
-                                type="text"
-                                className="border border-gray-400 h-12 p-3 rounded-md w-full"
-                                required
-                                name="streetAddress"
-                                value={formData.streetAddress}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-
-                        <div>
-                            <label className="text-md font-semibold block">ZIP Code</label>
-                            <input
-                                type="text"
-                                className="border border-gray-400 h-12 p-3 rounded-md w-full"
-                                required
-                                name="zipCode"
-                                value={formData.zipCode}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                {/* Order Summary */}
-                <div>
-                    <h1 className="text-2xl font-bold mb-4 text-center">Order Summary</h1>
-                    <div className="border border-gray-300 rounded-lg p-6 bg-gray-50">
-                        <div className="flex justify-between font-semibold border-b pb-2">
-                            <p>Product</p>
-                            <p>Amount</p>
-                        </div>
-
-                        {cartItems.map((item, index) => (
-                            <div key={index} className="flex justify-between mt-3">
-                                <p>
-                                    {item.name} x {item.quantity}
-                                </p>
-                                <p>Rs. {(item.price * item.quantity).toLocaleString()}</p>
-                            </div>
-                        ))}
-
-                        <div className="mt-4 border-t pt-3">
-                            <div className="flex justify-between">
-                                <p className="font-semibold">Subtotal</p>
-                                <p>
-                                    Rs.{" "}
-                                    {cartItems
-                                        .reduce((total, item) => total + item.price * item.quantity, 0)
-                                        .toLocaleString()}
-                                </p>
-                            </div>
-
-                            <div className="flex justify-between mt-2">
-                                <p className="font-semibold">Delivery Charges</p>
-                                <p>
-                                    Rs.{" "}
-                                    {deliveryCharges !== null ? deliveryCharges.toLocaleString() : "Calculating..."}
-                                </p>
-                            </div>
-
-                            <div className="flex justify-between mt-4 border-t pt-3 font-bold text-lg text-yellow-600">
-                                <p>Total</p>
-                                <p>Rs. {calculateTotal().toLocaleString()}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Payment Options */}
-                    <div className="mt-6 border-t p-6">
-                        <p className="font-semibold mb-4">Payment Method</p>
-                        <div className="space-y-2">
-                            <div className="flex space-x-4">
-                                <input
-                                    type="radio"
-                                    name="paymentMethod"
-                                    value="bank_transfer"
-                                    checked={formData.paymentMethod === "bank_transfer"}
-                                    onChange={handleInputChange}
-                                />
-                                <label>Bank Transfer</label>
-                            </div>
-
-                            <div className="flex space-x-4">
-                                <input
-                                    type="radio"
-                                    name="paymentMethod"
-                                    value="cod"
-                                    checked={formData.paymentMethod === "cod"}
-                                    onChange={handleInputChange}
-                                />
-                                <label>Cash on Delivery</label>
-                            </div>
-
-                            <div className="flex space-x-4">
-                                <input
-                                    type="radio"
-                                    name="paymentMethod"
-                                    value="stripe"
-                                    checked={formData.paymentMethod === "stripe"}
-                                    onChange={handleInputChange}
-                                />
-                                <label>Credit/Debit Card (Stripe)</label>
-                            </div>
-                        </div>
-
-                        {formData.paymentMethod === "stripe" && (
-                            <Elements stripe={stripePromise}>
-                                <CheckoutForm
-                                    formData={formData}
-                                    cartItems={cartItems}
-                                    deliveryCharges={deliveryCharges}
-                                    calculateTotal={calculateTotal}
-                                />
-                            </Elements>
-                        )}
-                        {formData.paymentMethod !== "stripe" && (
-                            <button className="w-full bg-black text-white font-semibold py-3 mt-6 rounded-lg">
-                                Place Order
-                            </button>
-                        )}
-                    </div>
-                </div>
-            </div>
+      {formData.paymentMethod === 'card' && (
+        <div>
+          <PaymentElement />
         </div>
-    );
+      )}
+
+      <p className="font-semibold">
+        Delivery Charges: {deliveryCharge !== null ? `$${deliveryCharge}` : 'Loading...'}
+      </p>
+
+      <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded" disabled={loading}>
+        {loading ? 'Processing...' : 'Place Order'}
+      </button>
+    </form>
+  );
 };
 
-export default Page;
+const CheckoutFormPage = () => (
+  <Elements stripe={stripePromise}>
+    <CheckoutFormInner />
+  </Elements>
+);
+
+export default CheckoutFormPage;

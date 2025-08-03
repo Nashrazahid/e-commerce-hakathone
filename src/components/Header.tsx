@@ -263,42 +263,41 @@ function Header() {
         <Link href="/cart" className="hover:text-gray-600">
           <IoCartOutline size={20} />
         </Link>
-
-        {!isLoaded ? (
-          <span>Loading...</span>
-        ) : isSignedIn ? (
-          <div className="relative">
-            <button
-              onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-              className="hover:text-gray-600"
-            >
-              <CgProfile size={20} />
-            </button>
-            {profileDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50">
-                <div className="px-4 py-2 border-b text-sm text-gray-700">
-                  {user?.primaryEmailAddress?.emailAddress ||
-                    user?.emailAddresses?.[0]?.emailAddress ||
-                    "User"}
-                </div>
-                <Link href="/profile">
-                  <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    Profile
-                  </div>
-                </Link>
-                <SignOutButton redirectUrl="/contact">
-                  <button className="w-full text-left px-4 py-2 hover:bg-gray-100">
-                    Logout
-                  </button>
-                </SignOutButton>
-              </div>
-            )}
+          {!isLoaded ? null : isSignedIn ? (
+  <div className="relative">
+    <button
+      onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+      className="hover:text-gray-600"
+    >
+      <CgProfile size={20} />
+    </button>
+    {profileDropdownOpen && (
+      <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50">
+        <div className="px-4 py-2 border-b text-sm text-gray-700">
+          {user?.primaryEmailAddress?.emailAddress ||
+            user?.emailAddresses?.[0]?.emailAddress ||
+            "User"}
+        </div>
+        <Link href="/profile">
+          <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+            Profile
           </div>
-        ) : (
-          <Link href="/contact" className="hover:text-gray-600">
-            <CgProfile size={20} />
-          </Link>
-        )}
+        </Link>
+        <SignOutButton redirectUrl="/contact">
+          <button className="w-full text-left px-4 py-2 hover:bg-gray-100">
+            Logout
+          </button>
+        </SignOutButton>
+      </div>
+    )}
+  </div>
+) : (
+  <Link href="/contact" className="hover:text-gray-600">
+    <CgProfile size={20} />
+  </Link>
+)}
+
+        
       </div>
 
       {/* Mobile Dropdown */}

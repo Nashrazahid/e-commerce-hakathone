@@ -18,11 +18,24 @@ interface CartItem {
 
 function CartPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [loadingEmptyCart, setLoadingEmptyCart] = useState(true); // Spinner for empty cart
   const router = useRouter();
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
     setCart(storedCart);
+  
+
+   // Spinner timeout for empty cart
+    if (storedCart.length === 0) {
+      const timeout = setTimeout(() => {
+        setLoadingEmptyCart(false);
+      }, 1500); // 1.5 seconds spinner
+
+      return () => clearTimeout(timeout);
+    } else {
+      setLoadingEmptyCart(false);
+    }
   }, []);
 
   const updateCart = (updatedCart: CartItem[]) => {
@@ -62,14 +75,26 @@ function CartPage() {
     router.push("/collection");
   };
 
+  // if (cart.length === 0) {
+  //   return (
+  //     <div className="text-center mt-10">
+  //       <p className="text-lg font-bold">Your cart is empty!</p>
+  //     </div>
+  //   );
+  // }
+
+
   if (cart.length === 0) {
     return (
-      <div className="text-center mt-10">
-        <p className="text-lg font-bold">Your cart is empty!</p>
+      <div className="flex justify-center items-center h-screen">
+        {loadingEmptyCart ? (
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-indigo-600"></div>
+        ) : (
+          <p className="text-lg font-bold">Your cart is empty!</p>
+        )}
       </div>
     );
   }
-
   return (
     <div className="p-4 md:p-8">
       <h1 className="text-2xl font-bold mb-6 text-center md:text-left">Shopping Cart</h1>
@@ -152,200 +177,8 @@ function CartPage() {
 
 export default CartPage;
 
-// "use client";
 
-// import { useState, useEffect } from "react";
-// import Link from "next/link"; // Import Link component
-// import { useRouter } from "next/navigation";
-// import { Trash2 } from "lucide-react";
 
-// interface CartItem {
-//   slug: string;
-//   quantity: number;
-//   name?: string;
-//   price?: number;
-//   height?: number;
-//   width?: number;
-//   depth?: number;
-//   image?: {
-//     asset: {
-//       url: string;
-//     };
-//   };
-// }
 
-// export default function CartPage() {
-//   const [cart, setCart] = useState<CartItem[]>([]);
-//   const [isLoading, setIsLoading] = useState<boolean>(true);
-//   const router = useRouter();
-
-//   useEffect(() => {
-//     async function fetchCartItems() {
-//       const storedCart: CartItem[] = JSON.parse(localStorage.getItem("cart") || "[]");
-
-//       if (storedCart.length === 0) {
-//         setCart([]);
-//         setIsLoading(false);
-//         return;
-//       }
-
-//       const enrichedCart = await Promise.all(
-//         storedCart.map(async (item) => {
-//           if (item.name && item.price && item.height && item.width && item.depth) {
-//             return item;
-//           }
-//           try {
-//             const res = await fetch(`/api/products/${item.slug}`);
-//             if (!res.ok) {
-//               console.error(`Failed to fetch details for ${item.slug}`);
-//               return item;
-//             }
-//             const productDetails = await res.json();
-//             return { ...item, ...productDetails };
-//           } catch (error) {
-//             console.error("Error fetching product details:", error);
-//             return item;
-//           }
-//         })
-//       );
-
-//       setCart(enrichedCart);
-//       setIsLoading(false);
-//     }
-
-//     fetchCartItems();
-//   }, []);
-
-//   const updateCart = (newCart: CartItem[]) => {
-//     setCart(newCart);
-//     localStorage.setItem("cart", JSON.stringify(newCart));
-//   };
-
-//   const handleIncreaseQuantity = (index: number) => {
-//     const updatedCart = [...cart];
-//     updatedCart[index].quantity++;
-//     updateCart(updatedCart);
-//   };
-
-//   const handleDecreaseQuantity = (index: number) => {
-//     const updatedCart = [...cart];
-//     if (updatedCart[index].quantity > 1) {
-//       updatedCart[index].quantity--;
-//       updateCart(updatedCart);
-//     }
-//   };
-
-//   const handleRemoveItem = (index: number) => {
-//     const updatedCart = [...cart];
-//     updatedCart.splice(index, 1);
-//     updateCart(updatedCart);
-//   };
-
-//   const handleCheckout = () => {
-//     router.push("/contact");
-//   };
-
-//   const continueShopping = () => {
-//     router.push("/collection");
-//   };
-
-//   const calculateSubtotal = () => {
-//     return cart.reduce((total, item) => total + (item.price || 0) * item.quantity, 0);
-//   };
-
-//   if (isLoading) {
-//     return (
-//       <div className="text-center mt-10">
-//         <p className="text-lg font-bold">Loading your cart...</p>
-//       </div>
-//     );
-//   }
-
-//   if (cart.length === 0) {
-//     return (
-//       <div className="text-center mt-10">
-//         <p className="text-lg font-bold">Your cart is empty!</p>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className="p-4 md:p-8">
-//       <h1 className="text-2xl font-bold mb-6">Shopping Cart</h1>
-//       <div className="space-y-4">
-//         {cart.map((item, index) => (
-//           <div
-//             key={index}
-//             className="flex flex-col md:flex-row justify-between items-center border p-4 rounded-lg shadow-sm"
-//           >
-//             {/* Wrap Product Details with Link */}
-//             <Link href={`/product/${item.slug}`} className="flex items-center gap-4 cursor-pointer">
-//               <img
-//                 src={item.image?.asset.url || "/images/default-product.png"}
-//                 alt={item.name || item.slug}
-//                 className="w-24 h-24 object-cover rounded"
-//               />
-//               <div>
-//                 <h2 className="font-semibold text-lg">{item.name || item.slug}</h2>
-//                 <p className="text-gray-600">£{item.price?.toFixed(2)}</p>
-//                 {item.height && item.width && item.depth && (
-//                   <p className="text-gray-500 text-sm">
-//                     {item.height} x {item.width} x {item.depth} cm
-//                   </p>
-//                 )}
-//               </div>
-//             </Link>
-
-//             {/* Quantity Controls, Price and Remove Button */}
-//             <div className="flex items-center gap-4">
-//               <div className="flex items-center">
-//                 <button
-//                   onClick={() => handleDecreaseQuantity(index)}
-//                   className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
-//                 >
-//                   -
-//                 </button>
-//                 <span className="mx-2">{item.quantity}</span>
-//                 <button
-//                   onClick={() => handleIncreaseQuantity(index)}
-//                   className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
-//                 >
-//                   +
-//                 </button>
-//               </div>
-//               <p className="font-semibold">£{((item.price || 0) * item.quantity).toFixed(2)}</p>
-//               <button
-//                 onClick={() => handleRemoveItem(index)}
-//                 className="text-red-600 hover:text-red-800"
-//               >
-//                 <Trash2 className="w-6 h-6" />
-//               </button>
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-
-//       <div className="mt-6 text-right">
-//         <h2 className="text-xl font-bold">
-//           Subtotal: £{calculateSubtotal().toFixed(2)}
-//         </h2>
-//         <div className="mt-4 flex justify-end gap-4">
-//           <button
-//             onClick={continueShopping}
-//             className="px-6 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-//           >
-//             Continue Shopping
-//           </button>
-//           <button
-//             onClick={handleCheckout}
-//             className="px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
-//           >
-//             Checkout
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
 
 
